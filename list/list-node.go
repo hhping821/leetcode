@@ -12,60 +12,59 @@ type ListNode struct {
 
 //添加一个节点，指定位置，默认添到在头部位置
 func (l *ListNode) Insert(pos, data int) bool {
-	p := l
-	if p == nil {
+	if l == nil {
 		return false
 	}
 	i := 1
 
-	for p != nil && i < pos {
-		p = p.Next
+	for l != nil && i < pos {
+		l = l.Next
 		i++
 	}
 
-	if p == nil || i > pos {
+	if l == nil || i > pos {
 		return false
 	}
 	n := &ListNode{Data: data}
-	n.Next = p.Next
-	p.Next = n
+	n.Next = l.Next
+	l.Next = n
 	return true
 }
 
 //按索引值删除节点
 func (l *ListNode) RemoveIndexNode(i int) bool {
-	p := l
 	j := 1
-	for nil != p && j < i {
-		p = p.Next
+	for nil != l && j < i {
+		l = l.Next
 		j++
 	}
-	if nil == p || j > i {
+	if nil == l || j > i {
 		return false
 	}
-	p.Next = p.Next.Next
+	l.Next = l.Next.Next
 	return true
 }
 
 //按数据删除节点
 func (l *ListNode) RemoveDataNode(data int) bool {
-	p := l
-	for nil != p {
-		if p.Next != nil && p.Next.Data == data {
-			p.Next = p.Next.Next
+	for nil != l {
+		if l.Next != nil && l.Next.Data == data {
+			l.Next = l.Next.Next
 			return true
 		}
-		p = p.Next
+		l = l.Next
 	}
 	return false
 }
 
 //打印链表
 func (l *ListNode) Traverse() {
-	p := l.Next
-	for nil != p {
-		fmt.Println(p.Data)
-		p = p.Next
+	if l == nil {
+		return
+	}
+	for nil != l {
+		fmt.Println(l.Data)
+		l = l.Next
 	}
 	fmt.Println("--------done----------")
 }
@@ -78,14 +77,39 @@ func (l *ListNode) Init(data []int) {
 
 // 获取链表中的第i个元素，复杂度为o(n)
 func (l *ListNode) Get(i int) (int, error) {
-	p := l.Next
 	for j := 1; j < i; j++ {
-		if nil == p {
+		if nil == l {
 			//表示返回错误
 			return 0, errors.New("未找到节点值")
 		}
-		p = p.Next
+		l = l.Next
 	}
 
-	return p.Data, nil
+	return l.Data, nil
+}
+
+//删除有序链表中的重复值
+func (l *ListNode) DeleteDuplicates() {
+	for l != nil && l.Next != nil {
+		if l.Data == l.Next.Data {
+			l.Next = l.Next.Next
+		} else {
+			l = l.Next
+		}
+	}
+}
+
+//反正链表数据
+func (l *ListNode) ReversalList() *ListNode {
+	if l == nil || l.Next == nil {
+		return l
+	}
+	point := new(ListNode)
+	for l != nil {
+		node := l
+		l = l.Next
+		node.Next = point.Next
+		point.Next = node
+	}
+	return point
 }
