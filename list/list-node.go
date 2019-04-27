@@ -71,7 +71,12 @@ func (l *ListNode) Traverse() {
 
 func (l *ListNode) Init(data []int) {
 	for k, v := range data {
-		l.Insert(k+1, v)
+		if k == 0 {
+			l.Data = v
+		} else {
+			l.Next = &ListNode{Data: v}
+			l = l.Next
+		}
 	}
 }
 
